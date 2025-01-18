@@ -1,5 +1,6 @@
 from circleshape import *
 from constants import *
+import sys
 
 class Player(CircleShape):
     def __init__ (self, x, y, PLAYER_RADIUS):
@@ -36,6 +37,11 @@ class Player(CircleShape):
             self.move(dt,1)
         if keys[pygame.K_s]:
             self.move(dt,-1)
+        if keys[pygame.K_ESCAPE]:
+            pygame.quit()
+            print("asteroids closed")
+            sys.exit()
+            
 
     def move(self, dt, direction):
 

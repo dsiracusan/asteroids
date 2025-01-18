@@ -5,34 +5,53 @@ import pygame
 from constants import *
 from player import *
 import time
-
-    
+from asteroid import *
+from asteroidfield import *   
 
 
 def main():
     pygame.init()
     clock=pygame.time.Clock()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    
+    updateable= pygame.sprite.Group()
+    drawable= pygame.sprite.Group()
+    asteroids=pygame.sprite.Group()
+    AsteroidField.containers= (updateable)
+    Asteroid.containers= (asteroids,updateable,drawable)
+    Player.containers=(updateable, drawable)
     player= Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, PLAYER_RADIUS)
+    asteroidfield=AsteroidField()
     dt=0
     last_print_time = 0  # Tracks the last time we printed a message
     PRINT_INTERVAL = 10  # Interval in seconds
     while True:
         current_time = time.time()
-
+        screen.fill("black")
+        
         if current_time - last_print_time >= PRINT_INTERVAL:
             print("running")
             last_print_time = current_time
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            pygame.quit()
+            print("asteroids closed")
+            sys.exit()
+        for asteroid in asteroids:
+            if player.collision(asteroid):
+                print("Game Over!")
+                pygame.quit()
+                sys.exit()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+        for obj in updateable:
+            obj.update(dt)
+        for obj in drawable:
+            obj.draw(screen)
+
         
-        screen.fill("black")
+        
         dt=clock.tick(60)/1000
-        player.update(dt)
-        player.draw(screen)
-        
         pygame.display.flip()
     
         
