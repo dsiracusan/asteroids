@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 # Base class for game objects
 class CircleShape(pygame.sprite.Sprite):
@@ -24,3 +25,4 @@ class CircleShape(pygame.sprite.Sprite):
         distance= self.position.distance_to(circleshape.position)
         combined_radii= self.radius + circleshape.radius
         return distance <= combined_radii
+        
